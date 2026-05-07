@@ -1,6 +1,5 @@
 if SERVER then
     FProfiler = FProfiler or {Internal = {}, UI = {}}
-    AddCSLuaFile("fprofiler/cami.lua")
     AddCSLuaFile("fprofiler/gather.lua")
     AddCSLuaFile("fprofiler/report.lua")
     AddCSLuaFile("fprofiler/util.lua")
@@ -11,13 +10,6 @@ if SERVER then
     AddCSLuaFile("fprofiler/ui/clientcontrol.lua")
     AddCSLuaFile("fprofiler/ui/servercontrol.lua")
 
-    include("fprofiler/cami.lua")
-
-    CAMI.RegisterPrivilege({
-        Name = "FProfiler",
-        MinAccess = "superadmin"
-    })
-
     include("fprofiler/prettyprint.lua")
     include("fprofiler/util.lua")
     include("fprofiler/gather.lua")
@@ -26,12 +18,6 @@ if SERVER then
 else
     concommand.Add("FProfiler", function()
         FProfiler = FProfiler or {Internal = {}, UI = {}}
-        include("fprofiler/cami.lua")
-
-        CAMI.RegisterPrivilege({
-            Name = "FProfiler",
-            MinAccess = "superadmin"
-        })
 
         include("fprofiler/prettyprint.lua")
         include("fprofiler/util.lua")

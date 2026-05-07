@@ -33,11 +33,9 @@ Helper function: receive a net message
 local function receive(msg, f)
     net.Receive(msg, function(len, ply)
         -- Check access.
-        CAMI.PlayerHasAccess(ply, "FProfiler", function(b, _)
-            if not b then return end
-
+        if ply:IsSuperAdmin() then
             f(len, ply)
-        end)
+        end
     end)
 end
 

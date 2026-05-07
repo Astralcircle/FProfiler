@@ -183,9 +183,7 @@ onUpdate("frameVisible", function(isOpen)
     end
 
     -- Update access
-    CAMI.PlayerHasAccess(LocalPlayer(), "FProfiler", function(b, _)
-        update("serverAccess", b)
-    end)
+    update("serverAccess", LocalPlayer():IsSuperAdmin())
 
     if not isOpen then
         net.Start("FProfile_unsubscribe")
