@@ -233,6 +233,19 @@ Profiling control
 -- Start profiling
 -- focus: only measure data of everything that happens within a certain function
 function FProfiler.Internal.start(focus)
+    -- Support for live server profiling with Starfall
+    if SF then
+        for instance, _ in pairs(SF.allInstances) do
+            instance:setCheckCpu(false)
+            instance.oldCheckCpu = instance.run
+        end
+
+        hook.Add("StarfallPostInstanceCompile", "FProfiler_StarfallCompact", function(instance)
+            instance:setCheckCpu(false)
+            instance.oldCheckCpu = instance.run
+        end)
+    end
+
     -- Empty start times, so unfinished functions aren't
     -- registered as returns on a second profiling session
     -- local time = SysTime()
@@ -243,9 +256,20 @@ function FProfiler.Internal.start(focus)
     debug.sethook(function(event) onLuaEvent(event, focus) end, "cr")
 end
 
-
 -- Stop profiling
 function FProfiler.Internal.stop()
+    -- Support for live server profiling with Starfall
+    if SF then
+        hook.Remove("StarfallPostInstanceCompile", "FProfiler_StarfallCompact")
+
+        for instance, _ in pairs(SF.allInstances) do
+            if instance.oldCheckCpu then
+                instance:setCheckCpu(instance.oldCheckCpu == SF.Instance.runWithOps and true or instance.oldCheckCpu == SF.Instance.runWithoutOps and false)
+                instance.oldCheckCpu = nil
+            end
+        end
+    end
+
     debug.sethook()
 end
 
