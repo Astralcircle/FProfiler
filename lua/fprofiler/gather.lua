@@ -241,8 +241,8 @@ function FProfiler.Internal.start(focus)
         end
 
         hook.Add("StarfallPostInstanceCompile", "FProfiler_StarfallCompact", function(instance)
-            instance:setCheckCpu(false)
             instance.oldCheckCpu = instance.run
+            instance:setCheckCpu(false)
         end)
     end
 
@@ -264,7 +264,7 @@ function FProfiler.Internal.stop()
 
         for instance, _ in pairs(SF.allInstances) do
             if instance.oldCheckCpu then
-                instance:setCheckCpu(instance.oldCheckCpu == SF.Instance.runWithOps and true or instance.oldCheckCpu == SF.Instance.runWithoutOps and false)
+                instance:setCheckCpu(instance.oldCheckCpu == SF.Instance.runWithOps and true or false)
                 instance.oldCheckCpu = nil
             end
         end
